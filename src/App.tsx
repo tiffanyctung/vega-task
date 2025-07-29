@@ -3,7 +3,7 @@ import logo from "./img/vega-logo-w.png";
 import "./App.scss";
 import { LoginProvider, useLogin } from "./context/LoginContext";
 
-import Button from "./button/button";
+import Button from "./components/button/button";
 import Home from "./home/home";
 
 const AppContent = () => {

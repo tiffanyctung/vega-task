@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useLogin } from "../context/LoginContext";
-import Button from "../button/button";
-import Input from "../input/input";
+import Button from "../components/button/button";
+import Input from "../components/input/input";
+import Dashboard from "../dashboard/dashboard";
 import "./home.scss";
 
 const credentials = [
@@ -64,10 +65,7 @@ const Home = () => {
   return (
     <div className="home-screen">
       {isLoggedIn ? (
-        <>
-          <h1>Dashboard</h1>
-          <p>Hi {loggedInUser}</p>
-        </>
+        <Dashboard loggedInUser={loggedInUser} />
       ) : (
         <>
           <h1>Welcome to Vega Portfolio</h1>
