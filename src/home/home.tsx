@@ -8,6 +8,10 @@ const credentials = [
     username: "Tiffany",
     password: "Vega123!",
   },
+  {
+    username: "Vega",
+    password: "Vega123!",
+  },
 ];
 
 const Home = () => {
@@ -40,7 +44,7 @@ const Home = () => {
       return;
     }
 
-    localStorage.setItem("isLoggedIn", JSON.stringify(true));
+    localStorage.setItem("isLoggedInUser", username);
 
     setUsername("");
     setPassword("");
@@ -58,44 +62,48 @@ const Home = () => {
 
   return (
     <div className="home-screen">
-      <h1>Welcome to Vega Portfolio</h1>
-      {showLoginForm ? (
-        <div className="login-form">
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="form-input"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="form-input"
-            />
-            {error && <div className="error-message">{error}</div>}
-            <div className="form-actions">
-              <Button type="primary" onClick={handleSubmit}>
-                Log In
-              </Button>
-              <Button type="secondary" onClick={handleCancel}>
-                Cancel
-              </Button>
-            </div>
-          </form>
-        </div>
-      ) : isLoggedIn ? (
+      {isLoggedIn ? (
         <>
           <h1>Dashboard</h1>
           <p>Hi {loggedInUser}</p>
         </>
       ) : (
-        <Button type="primary" onClick={() => setShowLoginForm(true)}>
-          Log In
-        </Button>
+        <>
+          <h1>Welcome to Vega Portfolio</h1>
+          {showLoginForm ? (
+            <div className="login-form">
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="form-input"
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="form-input"
+                />
+                {error && <div className="error-message">{error}</div>}
+                <div className="form-actions">
+                  <Button type="primary" onClick={handleSubmit}>
+                    Log In
+                  </Button>
+                  <Button type="secondary" onClick={handleCancel}>
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            </div>
+          ) : (
+            <Button type="primary" onClick={() => setShowLoginForm(true)}>
+              Log In
+            </Button>
+          )}
+        </>
       )}
     </div>
   );

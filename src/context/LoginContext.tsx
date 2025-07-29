@@ -16,9 +16,11 @@ export const LoginProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(
-    Boolean(localStorage.getItem("isLoggedIn"))
+    Boolean(localStorage.getItem("isLoggedInUser"))
   );
-  const [loggedInUser, setLoggedInUser] = useState("");
+  const [loggedInUser, setLoggedInUser] = useState(
+    localStorage.getItem("isLoggedInUser") || ""
+  );
 
   return (
     <LoginContext.Provider

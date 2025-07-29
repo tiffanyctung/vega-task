@@ -36,7 +36,7 @@ const AppContent = () => {
               <Button
                 type="secondary"
                 onClick={() => {
-                  localStorage.removeItem("isLoggedIn");
+                  localStorage.removeItem("isLoggedInUser");
                   setIsLoggedIn(false);
                 }}
               >
