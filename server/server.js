@@ -1,81 +1,79 @@
-const jsonServer = require("json-server");
-const server = jsonServer.create();
-const router = jsonServer.router("db.json");
-const middlewares = jsonServer.defaults();
+const { spawn } = require("child_process");
+const path = require("path");
+const net = require("net");
 
-server.use(middlewares);
-server.use(jsonServer.bodyParser);
-
-server.get("/portfolios", (req, res) => {
-  try {
-    const { asOf } = req.query;
-    const db = router.db.getState();
-
-    const portfolio = db.portfolios.find((p) => {
-      const portfolioDate = new Date(p.asOf);
-      const queryDate = asOf ? new Date(asOf) : new Date();
-      return portfolioDate <= queryDate;
-    });
-
-    if (!portfolio) {
-      return res
-        .status(404)
-        .jsonp({ error: "No portfolio found for the specified date" });
-    }
-
-    const positions = portfolio.positions
-      .map((positionId) => db.positions.find((p) => p.id === positionId))
-      .filter(Boolean);
-
-    const enrichedPositions = positions.map((position) => {
-      const asset = db.assets.find((a) => a.id === position.asset);
-      const price = db.prices.find(
-        (p) =>
-          p.asset === position.asset &&
-          new Date(p.asOf) <= new Date(asOf || new Date().toISOString())
-      );
-
-      const value = position.quantity * (price ? price.price : 0);
-
-      return {
-        id: position.id,
-        asset: position.asset,
-        assetName: asset ? asset.name : "Unknown",
-        assetType: asset ? asset.type : "unknown",
-        quantity: position.quantity,
-        price: price ? price.price : 0,
-        value: value,
-        asOf: position.asOf,
-      };
-    });
-
-    const totalValue = enrichedPositions.reduce(
-      (sum, pos) => sum + pos.value,
-      0
-    );
-
-    const positionsWithWeights = enrichedPositions.map((pos) => ({
-      ...pos,
-      weight: totalValue > 0 ? (pos.value / totalValue) * 100 : 0,
-    }));
-
-    const response = {
-      id: portfolio.id,
-      asOf: asOf || portfolio.asOf,
-      positions: positionsWithWeights,
-      totalValue: Math.round(totalValue * 100) / 100,
-    };
-
-    res.jsonp(response);
-  } catch (error) {
-    console.error("Error processing request:", error);
-    res.status(500).jsonp({ error: "Internal server error" });
-  }
-});
-
-server.use(router);
-
+const dbPath = path.join(__dirname, "db.json");
 const PORT = 3001;
-server.listen(PORT, () => {
-  console.log(`JSON Server is running on http://localhost:${PORT}`);
+
+function isPortAvailable(port) {
+  return new Promise((resolve) => {
+    const server = net.createServer();
+
+    server.once("error", (err) => {
+      if (err.code === "EADDRINUSE") {
+        resolve(false);
+      } else {
+        resolve(true);
+      }
+    });
+
+    server.once("listening", () => {
+      server.close(() => {
+        resolve(true);
+      });
+    });
+
+    server.listen(port);
+  });
+}
+
+async function startServer() {
+  const portAvailable = await isPortAvailable(PORT);
+
+  if (!portAvailable) {
+    console.log(
+      `Port ${PORT} is already in use. The server is likely already running.`
+    );
+    console.log(`You can access the API at http://localhost:${PORT}`);
+    console.log(
+      "To stop the existing server, you may need to find and terminate the process."
+    );
+    process.exit(0);
+  }
+
+  const args = ["json-server", dbPath, "--port", PORT.toString()];
+
+  console.log("Starting json-server with the following configuration:");
+  console.log(`Database: ${dbPath}`);
+  console.log(`Port: ${PORT}`);
+  console.log(`Command: npx ${args.join(" ")}`);
+  console.log(
+    "Note: Custom middleware functionality is built into the mock API"
+  );
+
+  const server = spawn("npx", args, { stdio: "inherit" });
+
+  server.on("error", (err) => {
+    console.error("Failed to start json-server:", err);
+    process.exit(1);
+  });
+
+  server.on("close", (code) => {
+    console.log(`json-server exited with code ${code}`);
+  });
+
+  process.on("SIGINT", () => {
+    console.log("Stopping json-server...");
+    server.kill("SIGINT");
+  });
+
+  process.on("SIGTERM", () => {
+    console.log("Stopping json-server...");
+    server.kill("SIGTERM");
+  });
+}
+
+startServer().catch((err) => {
+  console.error("Error starting server:", err);
+  process.exit(1);
 });

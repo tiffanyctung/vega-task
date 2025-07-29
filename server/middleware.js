@@ -11,7 +11,8 @@ module.exports = (req, res, next) => {
     const from = url.searchParams.get("from");
     const to = url.searchParams.get("to");
 
-    let prices = res.locals.data.prices;
+    const db = req.app.db;
+    let prices = db.data.prices;
 
     if (asset) {
       const assetArray = asset.split(",");
@@ -39,7 +40,8 @@ module.exports = (req, res, next) => {
     const url = new URL(req.url, `http://${req.headers.host}`);
     const asOf = url.searchParams.get("asOf");
 
-    let portfolios = res.locals.data.portfolios;
+    const db = req.app.db;
+    let portfolios = db.data.portfolios;
 
     if (asOf) {
       portfolios = portfolios.filter((portfolio) => {
@@ -52,10 +54,54 @@ module.exports = (req, res, next) => {
     }
 
     if (portfolios.length === 0) {
-      portfolios = [res.locals.data.portfolios[0]];
+      portfolios = [db.data.portfolios[0]];
     }
 
-    res.json(portfolios[0]);
+    const portfolio = portfolios[0];
+    const positions = portfolio.positions
+      .map((positionId) => db.data.positions.find((p) => p.id === positionId))
+      .filter(Boolean);
+
+    const enrichedPositions = positions.map((position) => {
+      const asset = db.data.assets.find((a) => a.id === position.asset);
+      const price = db.data.prices.find(
+        (p) =>
+          p.asset === position.asset &&
+          new Date(p.asOf) <= new Date(asOf || new Date().toISOString())
+      );
+
+      const value = position.quantity * (price ? price.price : 0);
+
+      return {
+        id: position.id,
+        asset: position.asset,
+        assetName: asset ? asset.name : "Unknown",
+        assetType: asset ? asset.type : "unknown",
+        quantity: position.quantity,
+        price: price ? price.price : 0,
+        value: value,
+        asOf: position.asOf,
+      };
+    });
+
+    const totalValue = enrichedPositions.reduce(
+      (sum, pos) => sum + pos.value,
+      0
+    );
+
+    const positionsWithWeights = enrichedPositions.map((pos) => ({
+      ...pos,
+      weight: totalValue > 0 ? (pos.value / totalValue) * 100 : 0,
+    }));
+
+    const response = {
+      id: portfolio.id,
+      asOf: asOf || portfolio.asOf,
+      positions: positionsWithWeights,
+      totalValue: Math.round(totalValue * 100) / 100,
+    };
+
+    res.json(response);
     return;
   }
 
