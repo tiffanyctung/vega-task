@@ -7,7 +7,13 @@ import Button from "./button/button";
 import Home from "./home/home";
 
 const AppContent = () => {
-  const { setShowLoginForm } = useLogin();
+  const {
+    showLoginForm,
+    setShowLoginForm,
+    isLoggedIn,
+    setIsLoggedIn,
+    loggedInUser,
+  } = useLogin();
 
   return (
     <div className="App">
@@ -19,9 +25,25 @@ const AppContent = () => {
           <h2>Portfolio</h2>
         </div>
         <div className="right">
-          <Button type="primary" onClick={() => setShowLoginForm(true)}>
-            Log In
-          </Button>
+          {!showLoginForm && !isLoggedIn && (
+            <Button type="primary" onClick={() => setShowLoginForm(true)}>
+              Log In
+            </Button>
+          )}
+          {isLoggedIn && (
+            <>
+              <p>Hi {loggedInUser}</p>
+              <Button
+                type="secondary"
+                onClick={() => {
+                  localStorage.removeItem("isLoggedIn");
+                  setIsLoggedIn(false);
+                }}
+              >
+                Log Out
+              </Button>
+            </>
+          )}
         </div>
       </header>
 

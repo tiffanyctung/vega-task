@@ -29,6 +29,10 @@
 
   .right {
     padding-right: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
   }
 
   .logo-wrap {

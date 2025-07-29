@@ -11,7 +11,14 @@ const credentials = [
 ];
 
 const Home = () => {
-  const { showLoginForm, setShowLoginForm } = useLogin();
+  const {
+    showLoginForm,
+    setShowLoginForm,
+    isLoggedIn,
+    setIsLoggedIn,
+    loggedInUser,
+    setLoggedInUser,
+  } = useLogin();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -39,6 +46,8 @@ const Home = () => {
     setPassword("");
     setError("");
     setShowLoginForm(false);
+    setIsLoggedIn(true);
+    setLoggedInUser(username);
   };
 
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -78,6 +87,11 @@ const Home = () => {
             </div>
           </form>
         </div>
+      ) : isLoggedIn ? (
+        <>
+          <h1>Dashboard</h1>
+          <p>Hi {loggedInUser}</p>
+        </>
       ) : (
         <Button type="primary" onClick={() => setShowLoginForm(true)}>
           Log In
