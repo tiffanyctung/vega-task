@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLogin } from "../context/LoginContext";
 import Button from "../button/button";
+import Input from "../input/input";
 import "./home.scss";
 
 const credentials = [
@@ -73,19 +74,17 @@ const Home = () => {
           {showLoginForm ? (
             <div className="login-form">
               <form onSubmit={handleSubmit}>
-                <input
+                <Input
                   type="text"
                   placeholder="Username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="form-input"
                 />
-                <input
+                <Input
                   type="password"
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="form-input"
                 />
                 {error && <div className="error-message">{error}</div>}
                 <div className="form-actions">

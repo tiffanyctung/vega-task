@@ -1,0 +1,16 @@
+@import "../theme.scss";
+
+input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    font-size: 16px;
+
+    &:focus {
+      outline: none;
+      border-color: $border-color-focus;
+    }
+}
