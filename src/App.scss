@@ -3,6 +3,7 @@
 .App {
   text-align: center;
   box-sizing: border-box;
+  font-size: 16px;
 }
 
 .App-header {
@@ -13,7 +14,7 @@
   align-items: center;
   justify-content: space-between;
   position: relative;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid $border-color;
 
   .left {
     display: flex;
@@ -41,4 +42,10 @@
       margin-top: -15px;
     }
   }
+}
+
+.main {
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  position: relative;
 }

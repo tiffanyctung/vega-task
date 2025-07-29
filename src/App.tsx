@@ -1,10 +1,14 @@
 import React from "react";
 import logo from "./img/vega-logo-w.png";
 import "./App.scss";
+import { LoginProvider, useLogin } from "./context/LoginContext";
 
 import Button from "./button/button";
+import Home from "./home/home";
 
-function App() {
+const AppContent = () => {
+  const { setShowLoginForm } = useLogin();
+
   return (
     <div className="App">
       <header className="App-header">
@@ -15,10 +19,24 @@ function App() {
           <h2>Portfolio</h2>
         </div>
         <div className="right">
-          <Button>Log In</Button>
+          <Button type="primary" onClick={() => setShowLoginForm(true)}>
+            Log In
+          </Button>
         </div>
       </header>
+
+      <div className="main">
+        <Home />
+      </div>
     </div>
+  );
+};
+
+function App() {
+  return (
+    <LoginProvider>
+      <AppContent />
+    </LoginProvider>
   );
 }
 

@@ -1,0 +1,44 @@
+@import "../theme.scss";
+
+.home-screen {
+  text-align: center;
+  padding: 2rem;
+  max-width: 500px;
+  margin: 0 auto;
+
+  h1 {
+    margin-bottom: 2rem;
+  }
+
+  .login-form {
+    text-align: left;
+
+    .form-input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      font-size: 16px;
+
+      &:focus {
+        outline: none;
+        border-color: $border-color-focus;
+      }
+    }
+
+    .error-message {
+      color: $error;
+      margin-bottom: 1rem;
+      font-size: 15px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+  }
+}
