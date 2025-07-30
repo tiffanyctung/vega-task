@@ -3,12 +3,12 @@
 .dashboard {
   max-width: 1300px;
   width: calc(100% - 40px);
-  margin: 0 auto 100px;
-  padding: 20px 0;
+  margin: 0 auto;
+  padding: 20px 0 100px;
   min-height: 60vh;
 
   h1 {
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 30px;
     text-align: center;
     font-size: 2rem;

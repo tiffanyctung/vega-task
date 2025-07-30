@@ -49,6 +49,8 @@
     .App-logo {
       max-width: 100%;
       margin-top: -15px;
+      filter: var(--icon-filter);
+      transition: filter 0.3s ease;
     }
   }
 }

@@ -50,11 +50,13 @@ $error: #e74c3c;
   --crypto-color: #{$crypto-color};
   --stock-color: #{$stock-color};
   --fiat-color: #{$fiat-color};
+
+  --icon-filter: none;
 }
 
 // Dark mode
 .dark {
-  --bg-primary: #{$gray-900};
+  --bg-primary: #{$black};
   --bg-secondary: #{$gray-800};
   --text-primary: #{$white};
   --text-secondary: #{$gray-300};
@@ -76,11 +78,13 @@ $error: #e74c3c;
   --table-text-color: #{$gray-300};
   
   // Card styles
-  --card-bg: #{$gray-900};
+  --card-bg: #{$black};
   --card-shadow: rgba(0, 0, 0, 0.5);
   
   // Chart colors
   --chart-grid-color: #{$gray-700};
+
+  --icon-filter: invert(1);
 }
 
 $btn-primary: var(--btn-primary);
@@ -102,3 +106,5 @@ $table-text-color: var(--table-text-color);
 $table-indicator-color-crypto: var(--crypto-color);
 $table-indicator-color-stock: var(--stock-color);
 $table-indicator-color-fiat: var(--fiat-color);
+
+$logo-filter: var(--icon-filter);
