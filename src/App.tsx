@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "./img/vega-logo-w.png";
 import "./App.scss";
 import { LoginProvider, useLogin } from "./context/LoginContext";
@@ -17,6 +17,8 @@ const AppContent = () => {
     loggedInUser,
   } = useLogin();
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -34,19 +36,54 @@ const AppContent = () => {
           )}
           {isLoggedIn && (
             <>
-              <p>Hi {loggedInUser}</p>
-              <Button
-                type="secondary"
-                onClick={() => {
-                  localStorage.removeItem("isLoggedInUser");
-                  setIsLoggedIn(false);
-                }}
-              >
-                Log Out
-              </Button>
+              <div className="desktop-menu">
+                <p>Hi {loggedInUser}</p>
+                <Button
+                  type="secondary"
+                  onClick={() => {
+                    localStorage.removeItem("isLoggedInUser");
+                    setIsLoggedIn(false);
+                  }}
+                >
+                  Log Out
+                </Button>
+                <DarkModeToggle />
+              </div>
+              <div className="mobile-menu">
+                <ul
+                  className="mobile-menu-icon"
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
+                  <li />
+                  <li />
+                  <li />
+                </ul>
+                <div
+                  className={`mobile-menu-container ${
+                    isMobileMenuOpen ? "active" : ""
+                  }`}
+                >
+                  <ul className="mobile-menu-list">
+                    <li>Hi {loggedInUser}</li>
+                    <li>
+                      <DarkModeToggle />
+                    </li>
+                    <li>
+                      <Button
+                        type="secondary"
+                        onClick={() => {
+                          localStorage.removeItem("isLoggedInUser");
+                          setIsLoggedIn(false);
+                        }}
+                      >
+                        Log Out
+                      </Button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </>
           )}
-          <DarkModeToggle />
         </div>
       </header>
       <Main />

@@ -77,3 +77,9 @@
     position: relative;
   }
 }
+
+@media (max-width: 768px) {
+  .home-screen {
+    min-height: calc(100vh - 105px);
+  }
+}

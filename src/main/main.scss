@@ -4,5 +4,13 @@
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 81px);
+  padding-top: 81px;
+}
+
+@media (max-width: 768px) {
+  .main {
+    min-height: calc(100vh - 66px);
+    padding-top: 66px;
+  }
 }
