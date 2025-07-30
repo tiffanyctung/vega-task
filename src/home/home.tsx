@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useLogin } from "../context/LoginContext";
 import Button from "../components/button/button";
 import Input from "../components/input/input";
-import Dashboard from "../dashboard/dashboard";
 import "./home.scss";
 
 const credentials = [
@@ -17,14 +16,8 @@ const credentials = [
 ];
 
 const Home = () => {
-  const {
-    showLoginForm,
-    setShowLoginForm,
-    isLoggedIn,
-    setIsLoggedIn,
-    loggedInUser,
-    setLoggedInUser,
-  } = useLogin();
+  const { showLoginForm, setShowLoginForm, setIsLoggedIn, setLoggedInUser } =
+    useLogin();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -64,43 +57,41 @@ const Home = () => {
 
   return (
     <div className="home-screen">
-      {isLoggedIn ? (
-        <Dashboard loggedInUser={loggedInUser} />
-      ) : (
-        <>
-          <h1>Welcome to Vega Portfolio</h1>
-          {showLoginForm ? (
-            <div className="login-form">
-              <form onSubmit={handleSubmit}>
-                <Input
-                  type="text"
-                  placeholder="Username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                {error && <div className="error-message">{error}</div>}
-                <div className="form-actions">
-                  <Button type="primary" onClick={handleSubmit}>
-                    Log In
-                  </Button>
-                  <Button type="secondary" onClick={handleCancel}>
-                    Cancel
-                  </Button>
-                </div>
-              </form>
+      <h2>Welcome to</h2>
+      <h1>VEGA Portfolio</h1>
+      {showLoginForm ? (
+        <div className="login-form">
+          <form onSubmit={handleSubmit}>
+            <Input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {error && <div className="error-message">{error}</div>}
+            <div className="form-actions">
+              <Button type="primary" onClick={handleSubmit}>
+                Log In
+              </Button>
+              <Button type="secondary" onClick={handleCancel}>
+                Cancel
+              </Button>
             </div>
-          ) : (
-            <Button type="primary" onClick={() => setShowLoginForm(true)}>
-              Log In
-            </Button>
-          )}
-        </>
+          </form>
+        </div>
+      ) : (
+        <div className="cta-container">
+          <Button type="primary" onClick={() => setShowLoginForm(true)}>
+            Log In
+          </Button>
+          <div className="indicator-line" />
+        </div>
       )}
     </div>
   );

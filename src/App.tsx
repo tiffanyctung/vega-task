@@ -4,7 +4,7 @@ import "./App.scss";
 import { LoginProvider, useLogin } from "./context/LoginContext";
 
 import Button from "./components/button/button";
-import Home from "./home/home";
+import Main from "./main/main";
 
 const AppContent = () => {
   const {
@@ -46,10 +46,7 @@ const AppContent = () => {
           )}
         </div>
       </header>
-
-      <div className="main">
-        <Home />
-      </div>
+      <Main />
     </div>
   );
 };
