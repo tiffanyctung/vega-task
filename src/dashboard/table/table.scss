@@ -2,9 +2,9 @@
 
 .table-container {
     overflow-x: auto;
-  }
+}
 
-  table {
+table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 30px;
@@ -38,6 +38,12 @@
     td:last-child, th:last-child {
       text-align: right;
     }
+    
+    .no-data-cell {
+      text-align: center;
+      color: var(--text-secondary);
+      padding: 30px 15px;
+    }
 
     .indicator {
         width: 8px;
@@ -59,4 +65,4 @@
             background-color: var(--fiat-color);
         }
     }
-  }
+}

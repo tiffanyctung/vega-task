@@ -87,7 +87,13 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
   }, [assets]);
 
   useEffect(() => {
-    if (!portfolio || !assets.length) return;
+    if (!portfolio || !assets.length) {
+      setChartData({
+        labels: [],
+        datasets: [],
+      });
+      return;
+    }
 
     const labels: string[] = [];
     const values: number[] = [];
@@ -174,7 +180,11 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
 
   return (
     <div className="doughnut-chart-container">
-      <Doughnut data={chartData} options={options} />
+      {!chartData.labels || chartData.labels.length === 0 ? (
+        <div className="no-data">No allocation data available</div>
+      ) : (
+        <Doughnut data={chartData} options={options} />
+      )}
     </div>
   );
 };

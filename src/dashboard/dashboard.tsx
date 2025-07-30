@@ -231,17 +231,19 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUser }) => {
                 "Value (USD)",
               ]}
             />
-            <div className="portfolio-summary">
-              <div className="total-value">
-                <span>Total Portfolio Value:</span>
-                <span className="value">
-                  $
-                  {portfolio.positions
-                    .reduce((sum, pos) => sum + pos.quantity * pos.price, 0)
-                    .toFixed(2)}
-                </span>
+            {assets && assets.length > 0 && (
+              <div className="portfolio-summary">
+                <div className="total-value">
+                  <span>Total Portfolio Value:</span>
+                  <span className="value">
+                    $
+                    {portfolio.positions
+                      .reduce((sum, pos) => sum + pos.quantity * pos.price, 0)
+                      .toFixed(2)}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
           </ChartCard>
         </>
       )}

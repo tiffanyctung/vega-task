@@ -7,6 +7,13 @@ const Table: React.FC<{
   assets: Asset[];
   columns: string[];
 }> = ({ portfolio, assets, columns }) => {
+  if (!portfolio || !assets.length) {
+    return (
+      <div className="table-container">
+        <div className="no-data">No portfolio data available</div>
+      </div>
+    );
+  }
   return (
     <div className="table-container">
       <table>
@@ -18,21 +25,29 @@ const Table: React.FC<{
           </tr>
         </thead>
         <tbody>
-          {portfolio.positions.map((position) => {
-            const asset = assets.find((a) => a.id === position.asset);
-            return (
-              <tr key={position.id}>
-                <td>{asset?.name || "Unknown"}</td>
-                <td>
-                  <span className={`indicator ${asset?.type}`} />
-                  {asset?.type || "Unknown"}
-                </td>
-                <td>{position.quantity}</td>
-                <td>${position.price.toFixed(2)}</td>
-                <td>${(position.quantity * position.price).toFixed(2)}</td>
-              </tr>
-            );
-          })}
+          {portfolio.positions && portfolio.positions.length > 0 ? (
+            portfolio.positions.map((position) => {
+              const asset = assets.find((a) => a.id === position.asset);
+              return (
+                <tr key={position.id}>
+                  <td>{asset?.name || "Unknown"}</td>
+                  <td>
+                    <span className={`indicator ${asset?.type}`} />
+                    {asset?.type || "Unknown"}
+                  </td>
+                  <td>{position.quantity}</td>
+                  <td>${position.price.toFixed(2)}</td>
+                  <td>${(position.quantity * position.price).toFixed(2)}</td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan={columns.length} className="no-data-cell">
+                No positions available
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
