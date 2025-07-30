@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,6 +9,8 @@ import {
   Tooltip,
   Legend,
   TooltipItem,
+  ChartData,
+  ChartOptions,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { Price } from "../../services/api.service";
@@ -28,20 +30,34 @@ interface LineChartProps {
   prices: Price[];
 }
 
+type LineChartDataType = ChartData<"line", number[], string>;
+
+const chartColors = {
+  primary: "rgba(239, 197, 114, 0.8)",
+  primaryLight: "rgba(239, 197, 114, 0.2)",
+  text: "#444",
+  grid: "rgba(0, 0, 0, 0.05)",
+  tooltip: {
+    background: "#fff",
+    border: "#e0e0e0",
+    text: "#333",
+  },
+};
+
 const LineChart: React.FC<LineChartProps> = ({ prices }) => {
-  const [chartData, setChartData] = useState<any>({
+  const [chartData, setChartData] = useState<LineChartDataType>({
     labels: [],
     datasets: [],
   });
 
-  const formatYAxisValue = (value: number) => {
+  const formatYAxisValue = useCallback((value: number): string => {
     if (value >= 1000000) {
       return `$${(value / 1000000).toFixed(1)}M`;
     } else if (value >= 1000) {
       return `$${(value / 1000).toFixed(1)}K`;
     }
     return `$${value.toFixed(2)}`;
-  };
+  }, []);
 
   useEffect(() => {
     if (!prices || prices.length === 0) {
@@ -55,9 +71,11 @@ const LineChart: React.FC<LineChartProps> = ({ prices }) => {
     const sortedPrices = [...prices].sort(
       (a, b) => new Date(a.asOf).getTime() - new Date(b.asOf).getTime()
     );
+
     const labels = sortedPrices.map((price) =>
       new Date(price.asOf).toLocaleDateString()
     );
+
     const data = sortedPrices.map((price) => price.price);
 
     if (labels.length > 0 && data.length > 0) {
@@ -67,11 +85,11 @@ const LineChart: React.FC<LineChartProps> = ({ prices }) => {
           {
             label: "Total Portfolio Value",
             data,
-            borderColor: "rgba(75, 192, 192, 1)",
-            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            borderColor: chartColors.primary,
+            backgroundColor: chartColors.primaryLight,
             tension: 0.4,
             pointRadius: 3,
-            pointBackgroundColor: "rgba(75, 192, 192, 1)",
+            pointBackgroundColor: chartColors.primary,
             pointBorderColor: "#fff",
             pointBorderWidth: 2,
             fill: true,
@@ -81,72 +99,75 @@ const LineChart: React.FC<LineChartProps> = ({ prices }) => {
     }
   }, [prices]);
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        grid: {
-          display: false,
+  const options = useMemo<ChartOptions<"line">>(
+    () => ({
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          grid: {
+            display: false,
+          },
+          ticks: {
+            color: chartColors.text,
+            font: {
+              size: 10,
+            },
+          },
         },
-        ticks: {
-          color: "#444",
-          font: {
-            size: 10,
+        y: {
+          grid: {
+            color: chartColors.grid,
+          },
+          ticks: {
+            color: chartColors.text,
+            font: {
+              size: 10,
+            },
+            callback: (value: any) => formatYAxisValue(value),
           },
         },
       },
-      y: {
-        grid: {
-          color: "rgba(0, 0, 0, 0.05)",
-        },
-        ticks: {
-          color: "#444",
-          font: {
-            size: 10,
-          },
-          callback: (value: any) => formatYAxisValue(value),
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        position: "top" as const,
-        labels: {
-          color: "#444",
-          padding: 20,
-          font: {
-            size: 12,
+      plugins: {
+        legend: {
+          position: "top" as const,
+          labels: {
+            color: chartColors.text,
+            padding: 20,
+            font: {
+              size: 12,
+            },
           },
         },
-      },
-      tooltip: {
-        backgroundColor: "#fff",
-        titleColor: "#333",
-        bodyColor: "#333",
-        borderColor: "#e0e0e0",
-        borderWidth: 1,
-        padding: 10,
-        displayColors: true,
-        usePointStyle: true,
-        callbacks: {
-          label: (context: TooltipItem<"line">) => {
-            const label = context.dataset.label || "";
-            const value = context.parsed.y;
-            return `${label}: $${value.toLocaleString()}`;
+        tooltip: {
+          backgroundColor: chartColors.tooltip.background,
+          titleColor: chartColors.tooltip.text,
+          bodyColor: chartColors.tooltip.text,
+          borderColor: chartColors.tooltip.border,
+          borderWidth: 1,
+          padding: 10,
+          displayColors: true,
+          usePointStyle: true,
+          callbacks: {
+            label: (context: TooltipItem<"line">) => {
+              const label = context.dataset.label || "";
+              const value = context.parsed.y;
+              return `${label}: $${value.toLocaleString()}`;
+            },
           },
         },
       },
-    },
-    animation: {
-      duration: 1000,
-      easing: "easeInOutQuart" as const,
-    },
-  };
+      animation: {
+        duration: 1000,
+        easing: "easeInOutQuart" as const,
+      },
+    }),
+    [formatYAxisValue]
+  );
 
   return (
     <div className="line-chart-container">
-      {prices && prices.length > 0 ? (
+      {prices?.length > 0 ? (
         <Line data={chartData} options={options} />
       ) : (
         <div className="no-data">

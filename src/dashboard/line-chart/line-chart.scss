@@ -13,6 +13,14 @@
   }
 }
 
+.no-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #888;
+}
+
 @media (max-width: 768px) {
   .line-chart-container {
     height: 250px;
