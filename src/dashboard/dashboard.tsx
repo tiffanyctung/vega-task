@@ -12,6 +12,7 @@ import LineChart from "./line-chart/line-chart";
 import FilterButtons, {
   FilterButtonsProps,
 } from "../components/filter-buttons/filter-buttons";
+import Table from "./table/table";
 import "./dashboard.scss";
 
 interface DashboardProps {
@@ -226,33 +227,11 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUser }) => {
         <div className="as-of">
           As of: {new Date(portfolio.asOf).toLocaleDateString()}
         </div>
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Asset</th>
-                <th>Type</th>
-                <th>Quantity</th>
-                <th>Price (USD)</th>
-                <th>Value (USD)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {portfolio.positions.map((position) => {
-                const asset = assets.find((a) => a.id === position.asset);
-                return (
-                  <tr key={position.id}>
-                    <td>{asset?.name || "Unknown"}</td>
-                    <td>{asset?.type || "Unknown"}</td>
-                    <td>{position.quantity}</td>
-                    <td>${position.price.toFixed(2)}</td>
-                    <td>${(position.quantity * position.price).toFixed(2)}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        <Table
+          portfolio={portfolio}
+          assets={assets}
+          columns={["Asset", "Type", "Quantity", "Price (USD)", "Value (USD)"]}
+        />
         <div className="portfolio-summary">
           <div className="total-value">
             <span>Total Portfolio Value:</span>
