@@ -22,7 +22,6 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUser }) => {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [prices, setPrices] = useState<Price[]>([]);
   const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
-  const [selectedAsset, setSelectedAsset] = useState<string>("");
   const [selectedAssetType, setSelectedAssetType] = useState<string>("");
   const [timeRange, setTimeRange] = useState<string>("1M");
 
@@ -32,10 +31,6 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUser }) => {
       setAssets(assetsData);
 
       setSelectedAssetType("");
-
-      if (assetsData.length > 0) {
-        setSelectedAsset(assetsData[0].name);
-      }
 
       const portfolioData = await getPortfolio();
       setPortfolio(portfolioData);
@@ -136,7 +131,6 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUser }) => {
   }, [assets, portfolio, timeRange]);
 
   const handleAssetChange = (asset: string) => {
-    setSelectedAsset(asset);
     console.log(`Selected asset: ${asset}`);
     const assetType = assets.find((a) => a.name === asset)?.type || "";
     setSelectedAssetType(assetType);
@@ -146,20 +140,8 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUser }) => {
     setSelectedAssetType(type);
 
     if (type === "") {
-      if (assets.length > 0) {
-        setSelectedAsset(assets[0].name);
-      }
     } else if (type === "all") {
       setSelectedAssetType("all");
-      setSelectedAssetType("all");
-      if (assets.length > 0) {
-        setSelectedAsset(assets[0].name);
-      }
-    } else {
-      const assetsOfType = assets.filter((a) => a.type === type);
-      if (assetsOfType.length > 0) {
-        setSelectedAsset(assetsOfType[0].name);
-      }
     }
   };
 
