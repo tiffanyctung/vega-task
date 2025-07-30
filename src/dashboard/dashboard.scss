@@ -41,6 +41,13 @@
     margin-bottom: 30px;
     width: 100%;
   }
+  
+  @media (max-width: 480px) {
+    .charts-container {
+      grid-template-columns: 1fr;
+      margin-bottom: 20px;
+    }
+  }
     
   .doughnut-chart-container {
     height: 300px;
@@ -85,8 +92,11 @@
 
 @media (max-width: 900px) {
   .dashboard {
+    padding-bottom: 50px;
+
     .charts-container {
-      grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
     }
   }
 }

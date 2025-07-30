@@ -179,7 +179,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
   }, [handleChartClick, darkMode]);
 
   return (
-    <div className="doughnut-chart-container">
+    <div className="doughnut-container">
       {!chartData.labels || chartData.labels.length === 0 ? (
         <div className="no-data">No allocation data available</div>
       ) : (

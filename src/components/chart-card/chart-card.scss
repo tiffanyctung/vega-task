@@ -23,3 +23,19 @@
       border-bottom: 1px solid $border-color-light;
     }
   }
+  
+  @media (max-width: 480px) {
+    .chart-card {
+      padding: 12px;
+      
+      h3 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+      }
+      
+      &:hover {
+        transform: none;
+      }
+    }
+  }

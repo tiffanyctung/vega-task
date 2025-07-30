@@ -19,6 +19,12 @@ const AppContent = () => {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedInUser");
+    setIsLoggedIn(false);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -29,27 +35,26 @@ const AppContent = () => {
           <h2>Portfolio</h2>
         </div>
         <div className="right">
-          {!showLoginForm && !isLoggedIn && (
-            <Button type="primary" onClick={() => setShowLoginForm(true)}>
-              Log In
-            </Button>
-          )}
-          {isLoggedIn && (
-            <>
-              <div className="desktop-menu">
+          <div className="desktop-menu">
+            {!showLoginForm && !isLoggedIn && (
+              <Button type="primary" onClick={() => setShowLoginForm(true)}>
+                Log In
+              </Button>
+            )}
+            {isLoggedIn && (
+              <>
                 <p>Hi {loggedInUser}</p>
-                <Button
-                  type="secondary"
-                  onClick={() => {
-                    localStorage.removeItem("isLoggedInUser");
-                    setIsLoggedIn(false);
-                  }}
-                >
+                <Button type="secondary" onClick={handleLogout}>
                   Log Out
                 </Button>
-                <DarkModeToggle />
-              </div>
-              <div className="mobile-menu">
+              </>
+            )}
+            <DarkModeToggle />
+          </div>
+
+          <div className="mobile-menu">
+            {isLoggedIn ? (
+              <>
                 <ul
                   className="mobile-menu-icon"
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -69,21 +74,17 @@ const AppContent = () => {
                       <DarkModeToggle />
                     </li>
                     <li>
-                      <Button
-                        type="secondary"
-                        onClick={() => {
-                          localStorage.removeItem("isLoggedInUser");
-                          setIsLoggedIn(false);
-                        }}
-                      >
+                      <Button type="secondary" onClick={handleLogout}>
                         Log Out
                       </Button>
                     </li>
                   </ul>
                 </div>
-              </div>
-            </>
-          )}
+              </>
+            ) : (
+              <DarkModeToggle />
+            )}
+          </div>
         </div>
       </header>
       <Main />
