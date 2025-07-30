@@ -188,60 +188,63 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUser }) => {
     },
   ];
 
-  if (!portfolio) {
-    return (
-      <div className="dashboard">
-        <h1>{loggedInUser ? `${loggedInUser}'s Portfolio` : ""}</h1>
-        <div className="loading-state">
-          <div className="spinner"></div>
-          <div>Loading portfolio data...</div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="dashboard">
       <h1>{loggedInUser ? `${loggedInUser}'s Dashboard` : ""}</h1>
 
-      <div className="charts-container">
-        <ChartCard title="Portfolio Allocation">
-          <FilterButtons data={doughnutFilterData} />
-          <DoughnutChart
-            portfolio={portfolio}
-            assets={assets}
-            selectedAssetType={selectedAssetType}
-            onAssetSelect={handleAssetChange}
-          />
-        </ChartCard>
-
-        <ChartCard title="Portfolio Value History">
-          <FilterButtons data={lineFilterData} />
-          <LineChart prices={prices} />
-        </ChartCard>
-      </div>
-
-      <ChartCard title="Portfolio Summary">
-        <div className="as-of">
-          As of: {new Date(portfolio.asOf).toLocaleDateString()}
+      {!portfolio ? (
+        <div className="loading-state">
+          <div className="spinner"></div>
+          <div>Loading portfolio data...</div>
         </div>
-        <Table
-          portfolio={portfolio}
-          assets={assets}
-          columns={["Asset", "Type", "Quantity", "Price (USD)", "Value (USD)"]}
-        />
-        <div className="portfolio-summary">
-          <div className="total-value">
-            <span>Total Portfolio Value:</span>
-            <span className="value">
-              $
-              {portfolio.positions
-                .reduce((sum, pos) => sum + pos.quantity * pos.price, 0)
-                .toFixed(2)}
-            </span>
+      ) : (
+        <>
+          <div className="charts-container">
+            <ChartCard title="Portfolio Allocation">
+              <FilterButtons data={doughnutFilterData} />
+              <DoughnutChart
+                portfolio={portfolio}
+                assets={assets}
+                selectedAssetType={selectedAssetType}
+                onAssetSelect={handleAssetChange}
+              />
+            </ChartCard>
+
+            <ChartCard title="Portfolio Value History">
+              <FilterButtons data={lineFilterData} />
+              <LineChart prices={prices} />
+            </ChartCard>
           </div>
-        </div>
-      </ChartCard>
+
+          <ChartCard title="Portfolio Summary">
+            <div className="as-of">
+              As of: {new Date(portfolio.asOf).toLocaleDateString()}
+            </div>
+            <Table
+              portfolio={portfolio}
+              assets={assets}
+              columns={[
+                "Asset",
+                "Type",
+                "Quantity",
+                "Price (USD)",
+                "Value (USD)",
+              ]}
+            />
+            <div className="portfolio-summary">
+              <div className="total-value">
+                <span>Total Portfolio Value:</span>
+                <span className="value">
+                  $
+                  {portfolio.positions
+                    .reduce((sum, pos) => sum + pos.quantity * pos.price, 0)
+                    .toFixed(2)}
+                </span>
+              </div>
+            </div>
+          </ChartCard>
+        </>
+      )}
     </div>
   );
 };
