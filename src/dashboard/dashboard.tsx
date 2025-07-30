@@ -9,10 +9,11 @@ import {
 } from "../services/api.service";
 import DoughnutChart from "./doughnut-chart/doughnut-chart";
 import LineChart from "./line-chart/line-chart";
+import Table from "./table/table";
 import FilterButtons, {
   FilterButtonsProps,
 } from "../components/filter-buttons/filter-buttons";
-import Table from "./table/table";
+import ChartCard from "../components/chart-card/chart-card";
 import "./dashboard.scss";
 
 interface DashboardProps {
@@ -204,8 +205,7 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUser }) => {
       <h1>{loggedInUser ? `${loggedInUser}'s Dashboard` : ""}</h1>
 
       <div className="charts-container">
-        <div className="chart-card">
-          <h3>Portfolio Allocation</h3>
+        <ChartCard title="Portfolio Allocation">
           <FilterButtons data={doughnutFilterData} />
           <DoughnutChart
             portfolio={portfolio}
@@ -213,17 +213,15 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUser }) => {
             selectedAssetType={selectedAssetType}
             onAssetSelect={handleAssetChange}
           />
-        </div>
+        </ChartCard>
 
-        <div className="chart-card">
-          <h3>Portfolio Value History</h3>
+        <ChartCard title="Portfolio Value History">
           <FilterButtons data={lineFilterData} />
           <LineChart prices={prices} />
-        </div>
+        </ChartCard>
       </div>
 
-      <div className="chart-card positions-table">
-        <h3>Portfolio Summary</h3>
+      <ChartCard title="Portfolio Summary">
         <div className="as-of">
           As of: {new Date(portfolio.asOf).toLocaleDateString()}
         </div>
@@ -243,7 +241,7 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUser }) => {
             </span>
           </div>
         </div>
-      </div>
+      </ChartCard>
     </div>
   );
 };
