@@ -24,7 +24,7 @@ button {
 
     &:hover {
         &:before {
-            right: 100%;
+            right: calc(100% + 10px);
         }
     }
 

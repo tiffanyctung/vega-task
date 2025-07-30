@@ -9,6 +9,9 @@ import {
 } from "../services/api.service";
 import DoughnutChart from "./doughnut-chart/doughnut-chart";
 import LineChart from "./line-chart/line-chart";
+import FilterButtons, {
+  FilterButtonsProps,
+} from "../components/filter-buttons/filter-buttons";
 import "./dashboard.scss";
 
 interface DashboardProps {
@@ -160,6 +163,47 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUser }) => {
     }
   };
 
+  const doughnutFilterData: FilterButtonsProps[] = [
+    {
+      label: "By Asset Class",
+      isActive: selectedAssetType === "",
+      onClick: () => handleAssetTypeChange(""),
+    },
+    {
+      label: "By Assets",
+      isActive: selectedAssetType === "all",
+      onClick: () => handleAssetTypeChange("all"),
+    },
+  ];
+
+  const lineFilterData: FilterButtonsProps[] = [
+    {
+      label: "1W",
+      isActive: timeRange === "1W",
+      onClick: () => setTimeRange("1W"),
+    },
+    {
+      label: "1M",
+      isActive: timeRange === "1M",
+      onClick: () => setTimeRange("1M"),
+    },
+    {
+      label: "3M",
+      isActive: timeRange === "3M",
+      onClick: () => setTimeRange("3M"),
+    },
+    {
+      label: "6M",
+      isActive: timeRange === "6M",
+      onClick: () => setTimeRange("6M"),
+    },
+    {
+      label: "1Y",
+      isActive: timeRange === "1Y",
+      onClick: () => setTimeRange("1Y"),
+    },
+  ];
+
   if (!portfolio) {
     return (
       <div className="dashboard">
@@ -179,27 +223,7 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUser }) => {
       <div className="charts-container">
         <div className="chart-card">
           <h3>Portfolio Allocation</h3>
-          <div className="filter-buttons">
-            <button
-              className={selectedAssetType === "" ? "active" : ""}
-              onClick={() => handleAssetTypeChange("")}
-            >
-              By Asset Class
-            </button>
-            <button
-              className={selectedAssetType === "all" ? "active" : ""}
-              onClick={() => handleAssetTypeChange("all")}
-            >
-              By Assets
-            </button>
-          </div>
-          {selectedAsset &&
-            selectedAssetType !== "" &&
-            selectedAssetType !== "all" && (
-              <div className="selected-asset-info">
-                Selected: {selectedAsset}
-              </div>
-            )}
+          <FilterButtons data={doughnutFilterData} />
           <DoughnutChart
             portfolio={portfolio}
             assets={assets}
@@ -210,38 +234,7 @@ const Dashboard: React.FC<DashboardProps> = ({ loggedInUser }) => {
 
         <div className="chart-card">
           <h3>Portfolio Value History</h3>
-          <div className="time-range-filter">
-            <button
-              className={timeRange === "1W" ? "active" : ""}
-              onClick={() => setTimeRange("1W")}
-            >
-              1W
-            </button>
-            <button
-              className={timeRange === "1M" ? "active" : ""}
-              onClick={() => setTimeRange("1M")}
-            >
-              1M
-            </button>
-            <button
-              className={timeRange === "3M" ? "active" : ""}
-              onClick={() => setTimeRange("3M")}
-            >
-              3M
-            </button>
-            <button
-              className={timeRange === "6M" ? "active" : ""}
-              onClick={() => setTimeRange("6M")}
-            >
-              6M
-            </button>
-            <button
-              className={timeRange === "1Y" ? "active" : ""}
-              onClick={() => setTimeRange("1Y")}
-            >
-              1Y
-            </button>
-          </div>
+          <FilterButtons data={lineFilterData} />
           <LineChart prices={prices} />
         </div>
       </div>
