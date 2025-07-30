@@ -26,20 +26,20 @@
     align-items: center;
     justify-content: center;
     border-radius: 20px;
-    background: linear-gradient(45deg, #000, #0c2f26, #482e12, #482e12);
+    background: linear-gradient(45deg, var(--bg-primary), #0c2f26, #482e12, #482e12);
     background-size: 150%;
     animation: gradientBg 15s ease infinite;
     width: calc(100% - 40px);
     margin: 20px auto;
 
   h1 {
-    color: $white;
+    color: var(--btn-primary-text);
     margin: 1rem auto 2rem;
     font-size: 2.5rem;
   }
 
   h2 {
-    color: $white;
+    color: var(--btn-primary-text);
     margin: 0 auto;
   }
 
@@ -66,7 +66,7 @@
   .indicator-line {
     width: 1px;
     height: 100px;
-    background: linear-gradient(to bottom, $white, transparent);
+    background: linear-gradient(to bottom, var(--btn-primary-text), transparent);
     position: absolute;
     top: 60px;
     left: 50%;

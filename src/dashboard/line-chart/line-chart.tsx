@@ -14,6 +14,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { Price } from "../../services/api.service";
+import { useTheme } from "../../context/ThemeContext";
 import "./line-chart.scss";
 
 ChartJS.register(
@@ -32,19 +33,21 @@ interface LineChartProps {
 
 type LineChartDataType = ChartData<"line", number[], string>;
 
-const chartColors = {
+const getChartColors = (darkMode: boolean) => ({
   primary: "rgba(239, 197, 114, 0.8)",
   primaryLight: "rgba(239, 197, 114, 0.2)",
-  text: "#444",
-  grid: "rgba(0, 0, 0, 0.05)",
+  text: darkMode ? "#e0e0e0" : "#444",
+  grid: darkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.05)",
   tooltip: {
-    background: "#fff",
-    border: "#e0e0e0",
-    text: "#333",
+    background: darkMode ? "#333" : "#fff",
+    border: darkMode ? "#555" : "#e0e0e0",
+    text: darkMode ? "#e0e0e0" : "#333",
   },
-};
+});
 
 const LineChart: React.FC<LineChartProps> = ({ prices }) => {
+  const { darkMode } = useTheme();
+  const chartColors = useMemo(() => getChartColors(darkMode), [darkMode]);
   const [chartData, setChartData] = useState<LineChartDataType>({
     labels: [],
     datasets: [],
@@ -97,7 +100,7 @@ const LineChart: React.FC<LineChartProps> = ({ prices }) => {
         ],
       });
     }
-  }, [prices]);
+  }, [prices, chartColors.primary, chartColors.primaryLight]);
 
   const options = useMemo<ChartOptions<"line">>(
     () => ({
@@ -162,7 +165,7 @@ const LineChart: React.FC<LineChartProps> = ({ prices }) => {
         easing: "easeInOutQuart" as const,
       },
     }),
-    [formatYAxisValue]
+    [formatYAxisValue, chartColors]
   );
 
   return (

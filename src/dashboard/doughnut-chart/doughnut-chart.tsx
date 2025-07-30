@@ -9,6 +9,7 @@ import {
 } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { Portfolio, Asset } from "../../services/api.service";
+import { useTheme } from "../../context/ThemeContext";
 import "./doughnut-chart.scss";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -39,7 +40,7 @@ const chartColorsMap: Record<string, string> = {
   default: "rgba(135, 135, 135, 0.8)",
 };
 
-const chartOptions = {
+const getChartOptions = (darkMode: boolean) => ({
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -48,6 +49,7 @@ const chartOptions = {
       labels: {
         boxWidth: 12,
         padding: 15,
+        color: darkMode ? "#fff" : "#555",
       },
     },
     tooltip: {
@@ -59,7 +61,7 @@ const chartOptions = {
       },
     },
   },
-};
+});
 
 const DoughnutChart: React.FC<DoughnutChartProps> = ({
   portfolio,
@@ -67,6 +69,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
   selectedAssetType,
   onAssetSelect,
 }) => {
+  const { darkMode } = useTheme();
   const [chartData, setChartData] = useState<ChartDataType>({
     labels: [],
     datasets: [],
@@ -164,10 +167,10 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
 
   const options = useMemo(() => {
     return {
-      ...chartOptions,
+      ...getChartOptions(darkMode),
       onClick: handleChartClick,
     };
-  }, [handleChartClick]);
+  }, [handleChartClick, darkMode]);
 
   return (
     <div className="doughnut-chart-container">

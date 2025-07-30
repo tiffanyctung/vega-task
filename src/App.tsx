@@ -2,8 +2,10 @@ import React from "react";
 import logo from "./img/vega-logo-w.png";
 import "./App.scss";
 import { LoginProvider, useLogin } from "./context/LoginContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 import Button from "./components/button/button";
+import DarkModeToggle from "./components/dark-mode-toggle/dark-mode-toggle";
 import Main from "./main/main";
 
 const AppContent = () => {
@@ -44,6 +46,7 @@ const AppContent = () => {
               </Button>
             </>
           )}
+          <DarkModeToggle />
         </div>
       </header>
       <Main />
@@ -53,9 +56,11 @@ const AppContent = () => {
 
 function App() {
   return (
-    <LoginProvider>
-      <AppContent />
-    </LoginProvider>
+    <ThemeProvider>
+      <LoginProvider>
+        <AppContent />
+      </LoginProvider>
+    </ThemeProvider>
   );
 }
 

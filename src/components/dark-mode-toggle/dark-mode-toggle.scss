@@ -1,0 +1,63 @@
+@import "../../theme.scss";
+
+.dark-mode-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:focus {
+    outline: none;
+  }
+  
+  .toggle-track {
+    width: 50px;
+    height: 24px;
+    background-color: var(--border-color);
+    border-radius: 30px;
+    position: relative;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    
+    .dark & {
+      background-color: var(--btn-primary);
+    }
+  }
+  
+  .toggle-thumb {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--btn-primary-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    
+    &.light {
+      transform: translateX(0);
+      color: var(--btn-primary);
+    }
+    
+    &.dark {
+      transform: translateX(30px);
+      color: var(--btn-primary-text);
+
+      .moon-icon {
+        stroke: var(--btn-primary);
+      }
+    }
+  }
+  
+  .sun-icon, .moon-icon {
+    width: 14px;
+    height: 14px;
+  }
+}

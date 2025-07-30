@@ -1,0 +1,32 @@
+@import "../../theme.scss";
+
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+  color: var(--text-primary);
+  
+  &:hover {
+    background-color: var(--btn-secondary);
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--border-color-focus);
+  }
+  
+  svg {
+    transition: transform 0.3s ease;
+  }
+  
+  &:active svg {
+    transform: scale(0.9);
+  }
+}
